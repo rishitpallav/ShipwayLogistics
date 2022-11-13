@@ -1,7 +1,6 @@
 package com.shipwaylogistics.contoller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,13 @@ import com.shipwaylogistics.dto.IdentityDto;
 import com.shipwaylogistics.dto.QuoteShipment;
 import com.shipwaylogistics.dto.SendQuotation;
 import com.shipwaylogistics.dto.SendShipment;
+import com.shipwaylogistics.model.Address;
 import com.shipwaylogistics.model.Customer;
-import com.shipwaylogistics.model.DeliveryPartner;
-import com.shipwaylogistics.model.Location;
 import com.shipwaylogistics.model.Service;
 import com.shipwaylogistics.model.Shipment;
+import com.shipwaylogistics.repository.AddressRepository;
 import com.shipwaylogistics.repository.CustomerRepository;
 import com.shipwaylogistics.repository.DeliveryPartnerRepository;
-import com.shipwaylogistics.repository.LocationRepository;
 import com.shipwaylogistics.repository.ServiceRepository;
 import com.shipwaylogistics.repository.ShipmentRepository;
 
@@ -38,18 +36,13 @@ public class CustomerController {
 	ShipmentRepository shipmentRepository;
 
 	@Autowired
-	LocationRepository locationRepository;
+	AddressRepository addressRepository;
 
 	@Autowired
 	ServiceRepository serviceRepository;
 
 	@Autowired
 	DeliveryPartnerRepository deliveryPartnerRepository;
-
-	@GetMapping("/getAllLocations")
-	public List<Location> getLocations() {
-		return locationRepository.findAll();
-	}
 
 	@PostMapping("/getQuote")
 	public List<SendQuotation> getQuote(@RequestBody QuoteShipment quoteShipment) {
@@ -59,11 +52,11 @@ public class CustomerController {
 			if (service.getMaxWeight() >= quoteShipment.getWeight()) {
 				boolean fromLocationPresent = false;
 				boolean toLocationPresent = false;
-				for(Location location : service.getLocations()) {
-					if(location.getZipcode() == quoteShipment.getFromLocation().getZipcode()) {
+				for(Address address : service.getAddresses()) {
+					if(address.getCity().equals(quoteShipment.getFromCity())) {
 						fromLocationPresent = true;
 					}
-					if(location.getZipcode() == quoteShipment.getToLocation().getZipcode()) {
+					if(address.getCity().equals(quoteShipment.getToCity())) {
 						toLocationPresent = true;
 					}
 				}					

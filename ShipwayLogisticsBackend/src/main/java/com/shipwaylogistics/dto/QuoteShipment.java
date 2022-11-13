@@ -1,7 +1,5 @@
 package com.shipwaylogistics.dto;
 
-import com.shipwaylogistics.model.Location;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,30 +15,39 @@ public class QuoteShipment {
 
 	double weight;
 	int quantity;
-	Location toLocation;
-	Location fromLocation;
+	String fromCity;
+	String toCity;
+
 	public double getWeight() {
 		return weight;
 	}
+
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
 	public int getQuantity() {
 		return quantity;
 	}
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public Location getToLocation() {
-		return toLocation;
+
+	public String getFromCity() {
+		return fromCity;
 	}
-	public void setToLocation(Location toLocation) {
-		this.toLocation = toLocation;
+
+	public void setFromCity(String fromCity) {
+		this.fromCity = fromCity;
 	}
-	public Location getFromLocation() {
-		return fromLocation;
+
+	public String getToCity() {
+		return toCity;
 	}
-	public void setFromLocation(Location fromLocation) {
-		this.fromLocation = fromLocation;
+
+	public void setToCity(String toCity) {
+		this.toCity = toCity;
 	}
+
 }

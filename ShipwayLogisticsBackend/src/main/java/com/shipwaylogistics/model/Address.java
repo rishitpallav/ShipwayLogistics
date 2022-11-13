@@ -26,7 +26,7 @@ public class Address {
 	private String address2;
 	private String city;
 	private String state;
-	private int pincode;
+	private int zipcode;
 	public String getAddress1() {
 		return address1;
 	}
@@ -51,11 +51,11 @@ public class Address {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public int getPincode() {
-		return pincode;
+	public int getZipcode() {
+		return zipcode;
 	}
-	public void setPincode(int pincode) {
-		this.pincode = pincode;
+	public void setZipcode(int zipcode) {
+		this.zipcode = zipcode;
 	}
 	
 	

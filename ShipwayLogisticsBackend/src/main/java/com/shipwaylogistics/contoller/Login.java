@@ -1,16 +1,12 @@
 package com.shipwaylogistics.contoller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shipwaylogistics.dto.FirstNameLastName;
 import com.shipwaylogistics.dto.LoginObject;
 import com.shipwaylogistics.model.Administrator;
 import com.shipwaylogistics.model.Customer;

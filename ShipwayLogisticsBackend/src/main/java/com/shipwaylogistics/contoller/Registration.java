@@ -33,7 +33,7 @@ public class Registration {
 	
 	@PostMapping("/addDeliveryPartner")
 	public void registerDeliveryPartner(@RequestBody DeliveryPartner deliveryPartner) {
-		System.out.println(deliveryPartner.getName() + " ___ " + deliveryPartner.getServices().get(0).getName()+ " ____ "+  deliveryPartner.getServices().get(0).getLocations());
+		System.out.println(deliveryPartner.getName() + " ___ " + deliveryPartner.getServices().get(0).getName()+ " ____ "+  deliveryPartner.getServices().get(0).getAddresses());
 		deliveryPartnerRepository.save(deliveryPartner);
 	}
 	

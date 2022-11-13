@@ -1,18 +1,14 @@
 package com.shipwaylogistics.model;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,53 +31,57 @@ public class Service {
 	private int basePrice;
 	private int discount;
 	private int maxWeight;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name = "SERVICE_LOCATION",
-		joinColumns = {
-				@JoinColumn(name = "service_id", referencedColumnName = "id")
-		},
-		inverseJoinColumns = {
-				@JoinColumn(name = "location_id", referencedColumnName = "zipcode")
-		}
-	)
-	//@JsonManagedReference
-	private Set<Location> locations;
+
+	@OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "service_address_fk", referencedColumnName = "id")
+	List<Address> addresses;
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public int getBasePrice() {
 		return basePrice;
 	}
+
 	public void setBasePrice(int basePrice) {
 		this.basePrice = basePrice;
 	}
+
 	public int getDiscount() {
 		return discount;
 	}
+
 	public void setDiscount(int discount) {
 		this.discount = discount;
 	}
+
 	public int getMaxWeight() {
 		return maxWeight;
 	}
+
 	public void setMaxWeight(int maxWeight) {
 		this.maxWeight = maxWeight;
 	}
-	public Set<Location> getLocations() {
-		return locations;
+
+	public List<Address> getAddresses() {
+		return addresses;
 	}
-	public void setLocations(Set<Location> locations) {
-		this.locations = locations;
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
-	
-	
+
 }

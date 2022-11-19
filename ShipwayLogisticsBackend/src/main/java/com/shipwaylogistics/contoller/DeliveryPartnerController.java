@@ -91,7 +91,7 @@ public class DeliveryPartnerController {
 	
 	@GetMapping("/getAllReviews")
 	public List<Review> getAllReviews(@RequestBody IdentityDto identityDto) {
-		return reviewRepository.findByUserId(identityDto.getId());
+		return reviewRepository.findByDeliveryPartnerId(identityDto.getId());
 	}
 	
 	@GetMapping("/getRecentReviews")

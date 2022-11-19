@@ -29,6 +29,7 @@ public class GetShipment {
 	String toCity;
 	String toState;
 	int toPincode;
+	int deliveryPartnerId;
 	int serviceId;
 	int customerId;
 	Payment payment;

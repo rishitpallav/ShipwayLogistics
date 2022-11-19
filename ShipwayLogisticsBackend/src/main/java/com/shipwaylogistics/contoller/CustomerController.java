@@ -17,13 +17,18 @@ import com.shipwaylogistics.dto.SendQuotation;
 import com.shipwaylogistics.dto.SendShipment;
 import com.shipwaylogistics.model.Address;
 import com.shipwaylogistics.model.Customer;
+import com.shipwaylogistics.model.DeliveryPartner;
+import com.shipwaylogistics.model.Payment;
+import com.shipwaylogistics.model.Review;
 import com.shipwaylogistics.model.Service;
 import com.shipwaylogistics.model.Shipment;
 import com.shipwaylogistics.repository.AddressRepository;
 import com.shipwaylogistics.repository.CustomerRepository;
 import com.shipwaylogistics.repository.DeliveryPartnerRepository;
+import com.shipwaylogistics.repository.ReviewRepository;
 import com.shipwaylogistics.repository.ServiceRepository;
 import com.shipwaylogistics.repository.ShipmentRepository;
+import com.shipwaylogistics.service.DeliveryPartnerService;
 
 @RestController
 @CrossOrigin
@@ -43,6 +48,9 @@ public class CustomerController {
 
 	@Autowired
 	DeliveryPartnerRepository deliveryPartnerRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
 
 	@PostMapping("/getQuote")
 	public List<SendQuotation> getQuote(@RequestBody QuoteShipment quoteShipment) {
@@ -52,14 +60,14 @@ public class CustomerController {
 			if (service.getMaxWeight() >= quoteShipment.getWeight()) {
 				boolean fromLocationPresent = false;
 				boolean toLocationPresent = false;
-				for(Address address : service.getAddresses()) {
-					if(address.getCity().equals(quoteShipment.getFromCity())) {
+				for (Address address : service.getAddresses()) {
+					if (address.getCity().equals(quoteShipment.getFromCity())) {
 						fromLocationPresent = true;
 					}
-					if(address.getCity().equals(quoteShipment.getToCity())) {
+					if (address.getCity().equals(quoteShipment.getToCity())) {
 						toLocationPresent = true;
 					}
-				}					
+				}
 				if (fromLocationPresent && toLocationPresent) {
 					SendQuotation sendQuotation = new SendQuotation();
 					sendQuotation.setServiceId(service.getId());
@@ -82,13 +90,15 @@ public class CustomerController {
 
 	@PostMapping("/saveShipment")
 	public int saveShipment(@RequestBody GetShipment getShipment) {
+		Customer customer = customerRepository.getReferenceById(getShipment.getCustomerId());
+		Payment payment = getShipment.getPayment();
+		Service service = serviceRepository.getReferenceById(getShipment.getServiceId());
 		Shipment shipment = new Shipment(getShipment.getDateBooked(), getShipment.getExpectedDeliveryDate(),
 				getShipment.getStatus(), getShipment.getFromAddress(), getShipment.getFromCity(),
-				getShipment.getFromState(), getShipment.getFromPincode(), getShipment.getToAddress(),
-				getShipment.getToCity(), getShipment.getToState(), getShipment.getToPincode());
-		shipment.setCustomer(customerRepository.getReferenceById(getShipment.getCustomerId()));
-		shipment.setPayment(getShipment.getPayment());
-		shipment.setService(serviceRepository.getReferenceById(getShipment.getServiceId()));
+				getShipment.getFromState(), getShipment.getFromPincode(), getShipment.getFromAddress(),
+				getShipment.getFromCity(), getShipment.getFromState(), getShipment.getFromPincode(),
+				getShipment.getToAddress(), getShipment.getToCity(), getShipment.getToState(),
+				getShipment.getToPincode(), service, payment, customer);
 		return shipmentRepository.save(shipment).getId();
 	}
 
@@ -116,6 +126,19 @@ public class CustomerController {
 		sendShipment.setDeliveryPartner(deliveryPartnerRepository
 				.getReferenceById(serviceRepository.getDeliveryPartnerId(service.getId())).getName());
 		return sendShipment;
+	}
+	
+	@PostMapping("/writeReview")
+	public Review writeReview(@RequestBody Review review) {
+		String customerName = customerRepository.getReferenceById(review.getUserId()).getFirstName();
+		DeliveryPartner deliveryPartner = deliveryPartnerRepository.getReferenceById(review.getDeliveryPartnerId());
+		review.setName(customerName);
+		review.setDeliveryPartnerName(deliveryPartner.getName());
+		reviewRepository.save(review);
+		double averageRating = (new DeliveryPartnerService()).updateDeliveryPartnerRatings(review.getDeliveryPartnerId(), reviewRepository.findByDeliveryPartnerId(review.getDeliveryPartnerId()));
+		deliveryPartner.setRatings(averageRating);
+		deliveryPartnerRepository.save(deliveryPartner);
+		return review;
 	}
 
 }

@@ -32,5 +32,37 @@ public class Payment {
 	private String creditCard;
 	private Date dateOfPurchase;
 	private int amount;
-	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getCreditCard() {
+		return creditCard;
+	}
+
+	public void setCreditCard(String creditCard) {
+		this.creditCard = creditCard;
+	}
+
+	public Date getDateOfPurchase() {
+		return dateOfPurchase;
+	}
+
+	public void setDateOfPurchase(Date dateOfPurchase) {
+		this.dateOfPurchase = dateOfPurchase;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
 }

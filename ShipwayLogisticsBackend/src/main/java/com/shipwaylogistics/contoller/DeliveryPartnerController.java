@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shipwaylogistics.dto.IdentityDto;
 import com.shipwaylogistics.dto.PartnerService;
 import com.shipwaylogistics.model.DeliveryPartner;
+import com.shipwaylogistics.model.Review;
 import com.shipwaylogistics.model.Service;
 import com.shipwaylogistics.model.Shipment;
 import com.shipwaylogistics.repository.DeliveryPartnerRepository;
+import com.shipwaylogistics.repository.ReviewRepository;
 import com.shipwaylogistics.repository.ServiceRepository;
 import com.shipwaylogistics.repository.ShipmentRepository;
 
@@ -30,6 +33,9 @@ public class DeliveryPartnerController {
 	
 	@Autowired
 	ShipmentRepository shipmentRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
 	
 	@PostMapping("/addService")
 	public void addService(@RequestBody PartnerService partnerService) {
@@ -81,5 +87,15 @@ public class DeliveryPartnerController {
 			return false;
 		}
 		return true;
+	}
+	
+	@GetMapping("/getAllReviews")
+	public List<Review> getAllReviews(@RequestBody IdentityDto identityDto) {
+		return reviewRepository.findByUserId(identityDto.getId());
+	}
+	
+	@GetMapping("/getRecentReviews")
+	public List<Review> getThreeMostRecentReviews(@RequestBody IdentityDto identityDto) {
+		return reviewRepository.findFirst3ByDeliveryPartnerIdOrderByShippedDateDesc(identityDto.getId());
 	}
 }
